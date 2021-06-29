@@ -7,20 +7,11 @@ var level = 0;
 var i = 0;
 
 
-$("body").one("keydown", function(){
-  updateH1();
-  nextSequence();
-  updateGamePattern();
-  playSound(colors[nextColorID]);
-  animate(colors[nextColorID]);
-
-});
-
+startGame();
 
 $(".btn").click(function(){
     userChosenColor = this.id;
     userClickedPattern.push(userChosenColor);
-    playSound(this.id);
     animate(this.id);
     checkAnswer(level);
 });
@@ -52,9 +43,8 @@ function checkAnswer(currentLevel){
   console.log(userChosenColor + " " + gamePattern[i]);
   console.log(gamePattern);
   if (userChosenColor === gamePattern[i]){
-    console.log("success");
-
-    console.log("i: " + i + "length: " + gamePattern.length);
+    playSound(userChosenColor);
+    //console.log("i: " + i + "length: " + gamePattern.length);
     if(i === gamePattern.length - 1){
       updateH1();
       nextSequence();
@@ -64,14 +54,36 @@ function checkAnswer(currentLevel){
         animate(colors[nextColorID]);
       }, 1000);
       i = 0;
-    } else { i++; }
+    } else {
+      i++;
+    }
 
   } else {
     // TODO: Restart game and do new animations when incorrect button press
-    console.log("wrong");
+    playSound("wrong");
+    $("body").addClass("game-over");
+    setTimeout(function(){
+      $("body").removeClass("game-over");
+    }, 200);
+    $("h1").html("Game Over, Press Any Key to Restart");
+    level = 0;
+    gamePattern = [];
+    i = 0;
+    startGame();
   }
 }
 
 function updateGamePattern(){
   gamePattern.push(colors[nextColorID]);
+}
+
+function startGame(){
+  $("body").one("keydown", function(){
+    updateH1();
+    nextSequence();
+    updateGamePattern();
+    playSound(colors[nextColorID]);
+    animate(colors[nextColorID]);
+
+  });
 }
