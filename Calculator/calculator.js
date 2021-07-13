@@ -20,6 +20,18 @@ app.post("/", function(req, res){
   res.send("the sum is: " + result);
 });
 
+app.get("/bmicalculator", function(req, res) {
+  res.sendFile(__dirname + "\\bmicalculator.html");
+});
+
+app.post("/bmicalculator", function(req, res){
+  var weight = Number(req.body.weight);
+  var height = Math.pow(Number(req.body.weight), 2);
+
+  var bmi = weight/height;
+  res.send("Your BMI is: " + bmi);
+});
+
 app.listen(port, function(){
   console.log("server started on port: " + port);
 });
