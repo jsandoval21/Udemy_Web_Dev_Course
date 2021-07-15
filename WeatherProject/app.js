@@ -14,15 +14,21 @@ app.get("/", function(req, res){
     response.on("data", function(data){
       const weatherData = JSON.parse(data);
       const temp = weatherData.main.temp;
-
+      const icon = weatherData.weather[1].icon;
+      const imageURL = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
       const weatherDesc = weatherData.weather[0].description;
 
       console.log(temp);
       console.log(weatherDesc);
+      console.log(icon);
+
+      res.write("<h1>Current temperature in Chico is: " + temp + " fahrenheit.</h1>");
+      res.write("<p>The weather in chico is: " + weatherDesc + "</p>");
+      res.write("<img src=" + imageURL + ">");
+      res.end();
     });
   });
 
-  res.send("Server is up and running");
 });
 
 app.listen(port, function() {
